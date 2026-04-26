@@ -73,3 +73,28 @@ Run backend tests with:
 ```powershell
 python backend\manage.py test
 ```
+
+## Deployment
+
+### Frontend (Vercel)
+
+1. Push changes to GitHub (already done).
+2. Go to [Vercel Dashboard](https://vercel.com/dashboard).
+3. Select your project (playto-frontend).
+4. Go to Settings > Environment Variables.
+5. Add `VITE_API_BASE` with your deployed backend URL (e.g., `https://your-backend.herokuapp.com/api/v1`).
+6. Redeploy: Go to Deployments tab and trigger a new deploy, or push to GitHub to auto-deploy.
+
+### Backend (Railway/Render)
+
+1. Create an account on [Railway](https://railway.app) or [Render](https://render.com).
+2. Connect your GitHub repo.
+3. Set build command: `pip install -r requirements.txt && python manage.py migrate && python manage.py seed_data`
+4. Set start command: `gunicorn playtopay.wsgi --bind 0.0.0.0:$PORT`
+5. Add environment variables:
+   - `SECRET_KEY`: Generate a new secret key
+   - `DEBUG`: False
+   - `ALLOWED_HOSTS`: Your domain (e.g., your-app.railway.app)
+   - `DATABASE_URL`: Provided by Railway/Render
+6. Deploy and get the URL (e.g., https://your-app.railway.app).
+7. Update frontend's `VITE_API_BASE` with this URL + `/api/v1`.
