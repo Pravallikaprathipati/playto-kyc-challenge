@@ -3,7 +3,6 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
-    
-    "startCommand": "python manage.py migrate && python manage.py seed_data || true && gunicorn playtopay.wsgi --bind 0.0.0.0:$PORT"
+    "startCommand": "python manage.py migrate && python manage.py seed_data || true && gunicorn playtopay.wsgi:application --bind 0.0.0.0:$PORT"
   }
 }
