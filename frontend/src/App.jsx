@@ -15,13 +15,35 @@ function fetchJson(url, options = {}) {
     headers.Authorization = `Token ${token}`
   }
 
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
   return fetch(url, {
     headers,
     ...options,
+    signal: controller.signal,
   }).then(async (res) => {
-    const data = await res.json().catch(() => ({}))
+    clearTimeout(timeoutId)
+    const text = await res.text()
+    let data = {}
+    if (text) {
+      try {
+        data = JSON.parse(text)
+      } catch (parseError) {
+        data = { status: res.status, statusText: res.statusText, body: text }
+      }
+    }
     if (!res.ok) throw data
     return data
+  }).catch((error) => {
+    clearTimeout(timeoutId)
+    if (error.name === 'AbortError') {
+      throw { detail: 'Request timed out. Check your internet or backend status.' }
+    }
+    if (error instanceof TypeError) {
+      throw { detail: `Network error: ${error.message}` }
+    }
+    throw error
   })
 }
 
