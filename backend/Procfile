@@ -1,2 +1,2 @@
-web: python manage.py migrate && gunicorn playtopay.wsgi
-release: python manage.py migrate
+release: python manage.py migrate && python manage.py seed_data
+web: gunicorn playtopay.wsgi --bind 0.0.0.0:$PORT
