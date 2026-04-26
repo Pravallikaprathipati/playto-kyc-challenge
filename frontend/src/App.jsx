@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
-const API_BASE = '/api/v1'
+const rawApiBase = import.meta.env.VITE_API_BASE
+const API_BASE = rawApiBase ? rawApiBase.replace(/\/$/, '') : '/api/v1'
 const ROLE_MERCHANT = 'merchant'
 const ROLE_REVIEWER = 'reviewer'
 
@@ -93,7 +94,7 @@ function App() {
       setUser({ role: data.role, username: form.username })
       setView('dashboard')
     } catch (err) {
-      setError(err.non_field_errors?.[0] || err.detail || 'Login failed.')
+      setError(err.non_field_errors?.[0] || err.detail || JSON.stringify(err) || 'Login failed.')
     }
   }
 
@@ -115,7 +116,7 @@ function App() {
       setUser({ role: data.role, username: registerForm.username })
       setView('dashboard')
     } catch (err) {
-      setError(err.detail || 'Registration failed.')
+      setError(err.detail || err.non_field_errors?.[0] || JSON.stringify(err) || 'Registration failed.')
     }
   }
 

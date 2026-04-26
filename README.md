@@ -37,10 +37,20 @@ This repository contains a working KYC onboarding service for Playto Pay.
    cd frontend
    npm install
    ```
-2. Start the frontend:
+2. Create a local env file:
+   ```powershell
+   copy .env.example .env.local
+   ```
+3. Start the frontend:
    ```powershell
    npm run dev
    ```
+
+### Environment
+
+The frontend uses `VITE_API_BASE` to call the backend.
+- Local dev can use the Vite proxy configuration
+- Production deploys must set `VITE_API_BASE` to the deployed backend URL
 
 ### Seed accounts
 
